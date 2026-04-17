@@ -1,8 +1,9 @@
 # StopLightSim.py
-# Name:
-# Date:
-# Assignment:
+# Name: Olivia Sulzle
+# Date: 4/19/26
+# Assignment: Lab 11
 
+#I had the simpy problem, so I followed the instructions and it ran fine.
 import simpy
 
 # Global variable to track light state
@@ -33,6 +34,8 @@ def car(env, car_id):
 
     # TODO: Make the car wait while the light is red
     # Hint: use a loop and env.timeout(1)
+    while not greenLight:
+        yield env.timeout(1)
 
     print("Car", car_id, "departed at", env.now)
 
@@ -47,6 +50,7 @@ def carArrival(env):
         print("Creating Car", car_id)
 
         # TODO: Start a new car process
+        env.process(car(env, car_id))
 
         yield env.timeout(5)
 
@@ -58,6 +62,7 @@ def main():
     env.process(stopLight(env))
     
     # TODO: Start the carArrival process
+    env.process(carArrival(env))
 
     # Run simulation
     env.run(until=100)
